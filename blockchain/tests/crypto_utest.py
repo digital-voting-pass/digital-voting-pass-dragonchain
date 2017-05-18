@@ -86,93 +86,93 @@ ORIGIN_ID = "31ce807a-868c-11e6-99f6-3c970e3bee11"
 VERIFICATION_TS = int(time.time())
 
 
-class TestFinalHash(unittest.TestCase):
-    def test_final_hash(self):
-        """  testing final_hash() with an arbitrary return value of Hello World to verify it is true
-            as well as testing that if you give function empty string, it still hashes properly """
-        test_val = crypto.final_hash("Hello World")
-        expected_hash = "c393624efa9b5f3169cd76b699b03e10f7f8b294f6d4f58a56bc770095ab6727"
-        self.assertEquals(test_val, expected_hash)
-        self.assertFalse(crypto.final_hash("") == "")
+# class TestFinalHash(unittest.TestCase):
+#     def test_final_hash(self):
+#         """  testing final_hash() with an arbitrary return value of Hello World to verify it is true
+#             as well as testing that if you give function empty string, it still hashes properly """
+#         test_val = crypto.final_hash("Hello World")
+#         expected_hash = "c393624efa9b5f3169cd76b699b03e10f7f8b294f6d4f58a56bc770095ab6727"
+#         self.assertEquals(test_val, expected_hash)
+#         self.assertFalse(crypto.final_hash("") == "")
 
 
-class TestBytes2long(unittest.TestCase):
-    def test_bytes2long(self):
-        """ testing crypto bytes2long """
-        self.assertRaises(AttributeError, crypto.bytes2long, 123)
+# class TestBytes2long(unittest.TestCase):
+#     def test_bytes2long(self):
+#         """ testing crypto bytes2long """
+#         self.assertRaises(AttributeError, crypto.bytes2long, 123)
 
-        test_val = crypto.bytes2long("111233345556@")
-        expected_val = 3897404203108157008445053417024
-        self.assertEqual(test_val, expected_val)
-        self.assertTrue(isinstance(test_val, long))
-
-
-class TestDeterministicHash(TestCase):
-    def test_deterministic_hash(self):
-        """ testing crypto deterministic_hash """
-        # testing to insure that hashed items may contain a mix of strings, numbers or None types.
-        hashed_items = ["123456", "654321", "transaction-service", 1476664195, "xeKuS9t8A=\n-----END PUBLIC KEY-----\n",
-                        "8885196", 1, "origin_id", 1476664210, "553412456235", None]
-
-        # calculate hash for hashed_items
-        val = crypto.deterministic_hash(hashed_items)
-        expected_hash = 233888947446904696754100748358486582297006536790227845537695088556215989769121608852431
-        
-        # insure the returned hash value of hashed_items matches what it should be
-        self.assertEqual(val, expected_hash)
+#         test_val = crypto.bytes2long("111233345556@")
+#         expected_val = 3897404203108157008445053417024
+#         self.assertEqual(test_val, expected_val)
+#         self.assertTrue(isinstance(test_val, long))
 
 
-class TestSignVerificationRecord(TestCase):
-    def test_sign_verification_record(self):
-        """ testing crypto sign_verification_record """
-        test_output = crypto.sign_verification_record(SIGNATORY, PRIOR_BLOCK_HASH, LOWER_HASH, PUBLIC_KEY, PRIVATE_KEY, BLOCK_ID, PHASE, ORIGIN_ID,
-                                                      VERIFICATION_TS, public_transmission=None, verification_info=None)
+# class TestDeterministicHash(TestCase):
+#     def test_deterministic_hash(self):
+#         """ testing crypto deterministic_hash """
+#         # testing to insure that hashed items may contain a mix of strings, numbers or None types.
+#         hashed_items = ["123456", "654321", "transaction-service", 1476664195, "xeKuS9t8A=\n-----END PUBLIC KEY-----\n",
+#                         "8885196", 1, "origin_id", 1476664210, "553412456235", None]
 
-        # testing that the generated hash from crypto.sign_verification_record is valid
-        test_signature = crypto.validate_signature(test_output['verification_record']['signature'])
-        self.assertTrue(test_signature, True)
+#         # calculate hash for hashed_items
+#         val = crypto.deterministic_hash(hashed_items)
+#         expected_hash = 233888947446904696754100748358486582297006536790227845537695088556215989769121608852431
 
-        # testing that an exception is thrown on invalid hashes
-        test_output['verification_record']['signature']['hash'] = 'invalid_hash'
-        self.assertRaises(BadSignatureError, crypto.validate_signature, test_output['verification_record']['signature'])
-
-
-class TestAssembleSigBlock(TestCase):
-    def test_assemble_sig_block(self):
-        """ testing crypto assemble_sig_block """
-        digest = "tvyb6yj6TqmmbpwiCBz9WsGmx6sOJBCvcDkw1GW5jCRWgusILKDWgn5wieDsqWEoKQtfzEgNRI4="
-        transaction = TRANSACTION.copy()
-
-        crypto.assemble_sig_block(transaction, SIGNATORY, PUBLIC_KEY, digest, HASH, SIG_TS, STRIPPED_HASH)
-
-        self.assertTrue('signature' in transaction and transaction['signature'] is not None, True)
-        signature_block = transaction['signature']
-
-        self.assertTrue('hash' in signature_block and signature_block['hash'] is not None, True)
-        self.assertTrue('public_key' in signature_block and signature_block['public_key'] is not None, True)
-        self.assertTrue('signatory' in signature_block and signature_block['signatory'] is not None, True)
-        self.assertTrue('signature' in signature_block and signature_block['signature'] is not None, True)
-        self.assertTrue('signature_ts' in signature_block and signature_block['signature_ts'] is not None, True)
-        self.assertTrue('stripped_hash' in signature_block, True)
-
-        self.assertEqual(HASH, signature_block['hash'])
-        self.assertEqual(STRIPPED_HASH, signature_block['stripped_hash'])
+#         # insure the returned hash value of hashed_items matches what it should be
+#         self.assertEqual(val, expected_hash)
 
 
-class TestSignTransaction(TestCase):
-    def test_sign_transaction(self):
-        """ testing crypto sign_transaction """
-        transaction = TRANSACTION.copy()
+# class TestSignVerificationRecord(TestCase):
+#     def test_sign_verification_record(self):
+#         """ testing crypto sign_verification_record """
+#         test_output = crypto.sign_verification_record(SIGNATORY, PRIOR_BLOCK_HASH, LOWER_HASH, PUBLIC_KEY, PRIVATE_KEY, BLOCK_ID, PHASE, ORIGIN_ID,
+#                                                       VERIFICATION_TS, public_transmission=None, verification_info=None)
 
-        test_transaction = crypto.sign_transaction(SIGNATORY, PRIVATE_KEY, PUBLIC_KEY, transaction)
+#         # testing that the generated hash from crypto.sign_verification_record is valid
+#         test_signature = crypto.validate_signature(test_output['verification_record']['signature'])
+#         self.assertTrue(test_signature, True)
 
-        # checking if signature made it into transaction
-        self.assertEqual('signature' in test_transaction, True)
+#         # testing that an exception is thrown on invalid hashes
+#         test_output['verification_record']['signature']['hash'] = 'invalid_hash'
+#         self.assertRaises(BadSignatureError, crypto.validate_signature, test_output['verification_record']['signature'])
 
-        # testing that KeyError is appropriately raised
-        for key in test_transaction.keys():
-            test_transaction.pop(key)
-            self.assertRaises(KeyError, crypto.sign_transaction, SIGNATORY, PRIVATE_KEY, PUBLIC_KEY, test_transaction)
+
+# class TestAssembleSigBlock(TestCase):
+#     def test_assemble_sig_block(self):
+#         """ testing crypto assemble_sig_block """
+#         digest = "tvyb6yj6TqmmbpwiCBz9WsGmx6sOJBCvcDkw1GW5jCRWgusILKDWgn5wieDsqWEoKQtfzEgNRI4="
+#         transaction = TRANSACTION.copy()
+
+#         crypto.assemble_sig_block(transaction, SIGNATORY, PUBLIC_KEY, digest, HASH, SIG_TS, STRIPPED_HASH)
+
+#         self.assertTrue('signature' in transaction and transaction['signature'] is not None, True)
+#         signature_block = transaction['signature']
+
+#         self.assertTrue('hash' in signature_block and signature_block['hash'] is not None, True)
+#         self.assertTrue('public_key' in signature_block and signature_block['public_key'] is not None, True)
+#         self.assertTrue('signatory' in signature_block and signature_block['signatory'] is not None, True)
+#         self.assertTrue('signature' in signature_block and signature_block['signature'] is not None, True)
+#         self.assertTrue('signature_ts' in signature_block and signature_block['signature_ts'] is not None, True)
+#         self.assertTrue('stripped_hash' in signature_block, True)
+
+#         self.assertEqual(HASH, signature_block['hash'])
+#         self.assertEqual(STRIPPED_HASH, signature_block['stripped_hash'])
+
+
+# class TestSignTransaction(TestCase):
+#     def test_sign_transaction(self):
+#         """ testing crypto sign_transaction """
+#         transaction = TRANSACTION.copy()
+
+#         test_transaction = crypto.sign_transaction(SIGNATORY, PRIVATE_KEY, PUBLIC_KEY, transaction)
+
+#         # checking if signature made it into transaction
+#         self.assertEqual('signature' in test_transaction, True)
+
+#         # testing that KeyError is appropriately raised
+#         for key in test_transaction.keys():
+#             test_transaction.pop(key)
+#             self.assertRaises(KeyError, crypto.sign_transaction, SIGNATORY, PRIVATE_KEY, PUBLIC_KEY, test_transaction)
 
 
 class TestValidTransactionSig(TestCase):
@@ -189,58 +189,58 @@ class TestValidTransactionSig(TestCase):
         self.assertTrue(sig_validation, True)
 
 
-class TestValidateVerificationRecord(TestCase):
-    def test_validate_verification_record(self):
-        """ testing crypto validate_verification_record """
-        verification_ts = 1479435043
-        test_output = crypto.sign_verification_record(SIGNATORY, PRIOR_BLOCK_HASH, LOWER_HASH, PUBLIC_KEY, PRIVATE_KEY, BLOCK_ID, PHASE, ORIGIN_ID,
-                                                      verification_ts, public_transmission=None, verification_info=None)
-        record = test_output['verification_record']
-        record['verification_ts'] = verification_ts
+# class TestValidateVerificationRecord(TestCase):
+#     def test_validate_verification_record(self):
+#         """ testing crypto validate_verification_record """
+#         verification_ts = 1479435043
+#         test_output = crypto.sign_verification_record(SIGNATORY, PRIOR_BLOCK_HASH, LOWER_HASH, PUBLIC_KEY, PRIVATE_KEY, BLOCK_ID, PHASE, ORIGIN_ID,
+#                                                       verification_ts, public_transmission=None, verification_info=None)
+#         record = test_output['verification_record']
+#         record['verification_ts'] = verification_ts
 
-        # testing if validate_verification_record passes
-        self.assertEqual(crypto.validate_verification_record(record, None), True)
+#         # testing if validate_verification_record passes
+#         self.assertEqual(crypto.validate_verification_record(record, None), True)
 
-        # testing that KeyError is appropriately raised
-        for key in record.keys():
-            if key is not "verification_info":
-                record.pop(key)
-                self.assertRaises(KeyError, crypto.validate_verification_record, record, None, test_mode=True)
-
-
-class TestSignSubscription(TestCase):
-    def test_sign_subscription(self):
-        """ testing crypto sign_subscription """
-        subscription = SUBSCRIPTION.copy()
-        crypto.sign_subscription(SIGNATORY, subscription, PRIVATE_KEY, PUBLIC_KEY)
-
-        # checking if signature made it into subscription
-        self.assertEqual('signature' in subscription, True)
-
-        # testing that the generated hash from crypto.sign_subscription is valid
-        test_signature = crypto.validate_signature(subscription['signature'])
-        self.assertTrue(test_signature, True)
-
-        # testing that an exception is thrown on invalid hashes
-        subscription['signature']['hash'] = 'invalid_hash'
-        self.assertRaises(BadSignatureError, crypto.validate_signature, subscription['signature'])
+#         # testing that KeyError is appropriately raised
+#         for key in record.keys():
+#             if key is not "verification_info":
+#                 record.pop(key)
+#                 self.assertRaises(KeyError, crypto.validate_verification_record, record, None, test_mode=True)
 
 
-class TestValidateSubscription(TestCase):
-    def test_validate_subscription(self):
-        """ testing crypto validate_subscription """
-        subscription = SUBSCRIPTION.copy()
-        crypto.sign_subscription(SIGNATORY, subscription, PRIVATE_KEY, PUBLIC_KEY)
+# class TestSignSubscription(TestCase):
+#     def test_sign_subscription(self):
+#         """ testing crypto sign_subscription """
+#         subscription = SUBSCRIPTION.copy()
+#         crypto.sign_subscription(SIGNATORY, subscription, PRIVATE_KEY, PUBLIC_KEY)
 
-        signature_block = subscription['signature']
-        criteria = subscription['criteria']
+#         # checking if signature made it into subscription
+#         self.assertEqual('signature' in subscription, True)
 
-        # testing if validate_subscription passes
-        self.assertEqual(crypto.validate_subscription(signature_block, criteria, subscription['create_ts'], PUBLIC_KEY), True)
+#         # testing that the generated hash from crypto.sign_subscription is valid
+#         test_signature = crypto.validate_signature(subscription['signature'])
+#         self.assertTrue(test_signature, True)
 
-        # testing that an exception is thrown on invalid hashes
-        signature_block['hash'] = 'invalid_hash'
-        self.assertRaises(BadSignatureError, crypto.validate_signature, signature_block)
+#         # testing that an exception is thrown on invalid hashes
+#         subscription['signature']['hash'] = 'invalid_hash'
+#         self.assertRaises(BadSignatureError, crypto.validate_signature, subscription['signature'])
+
+
+# class TestValidateSubscription(TestCase):
+#     def test_validate_subscription(self):
+#         """ testing crypto validate_subscription """
+#         subscription = SUBSCRIPTION.copy()
+#         crypto.sign_subscription(SIGNATORY, subscription, PRIVATE_KEY, PUBLIC_KEY)
+
+#         signature_block = subscription['signature']
+#         criteria = subscription['criteria']
+
+#         # testing if validate_subscription passes
+#         self.assertEqual(crypto.validate_subscription(signature_block, criteria, subscription['create_ts'], PUBLIC_KEY), True)
+
+#         # testing that an exception is thrown on invalid hashes
+#         signature_block['hash'] = 'invalid_hash'
+#         self.assertRaises(BadSignatureError, crypto.validate_signature, signature_block)
 
 if __name__ == '__main__':
     unittest.main()

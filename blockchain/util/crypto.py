@@ -110,7 +110,6 @@ def sign_transaction(signatory,
     log.info("Merging stripped and full hash")
     merged_hash = "{:x}".format(merge_hashes(stripped_hash, hash))
     merged_hash_parts = []
-
     # Split merged hash into parts with length 8
     for i in xrange(0, len(merged_hash)/16):
             merged_hash_parts.append(merged_hash[i*16:i*16+16])
@@ -333,15 +332,26 @@ def validate_signature(signature_block, log=logging.getLogger(__name__)):
     verifying_key = VerifyingKey.from_pem(signature_block["public_key"])
 
     log.info("Decoding the digest")
-    decoded_digest = signature_block["signature"].decode('base64')
+    decoded_digest = []
+    print signature_block["signature"]
+    if type(signature_block["signature"]) == list:
+        decoded_digest = signature_block["signature"]
+    else:
+        decoded_digest.append(signature_block["signature"].decode('base64'))
 
     log.info('Performing signature verification')
     # checking stripped hash if this is a transaction signature
     if "stripped_hash" in signature_block and signature_block['stripped_hash']:
-        merged_hash = merge_hashes(signature_block["stripped_hash"], signature_block["hash"])
-        verifying_key.verify(decoded_digest, str(merged_hash))
+        merged_hash = "{:x}".format(merge_hashes(signature_block["stripped_hash"], signature_block["hash"]))
     else:
-        verifying_key.verify(decoded_digest, str(signature_block["hash"]))
+        merged_hash = str(signature_block["hash"])
+        
+    # Split merged hash into parts with length 8
+    for i in xrange(0, len(merged_hash)/16):
+            print i
+            print binascii.hexlify(decoded_digest[i])
+            # verifying_key.verify(decoded_digest[i],binascii.unhexlify(merged_hash[i*16:i*16+16]))
+
     # signature hash is valid
     return True
 
