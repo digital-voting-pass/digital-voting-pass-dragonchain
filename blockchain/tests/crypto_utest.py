@@ -38,9 +38,10 @@ from ecdsa import BadSignatureError
 import blockchain.util.crypto as crypto
 
 """ DISCLAIMER: mock global data for testing purposes. Do not use these keys for anything other than testing. """
-PRIVATE_KEY = "-----BEGIN EC PARAMETERS-----\nBgUrgQQAIQ==\n-----END EC PARAMETERS-----\n-----BEGIN EC PRIVATE KEY-----\nMGgCAQEEHGLBg95ayw1hDWUMsfTdqnlQmVpz3n1vTzr7yhmgBwYFK4EEACGhPAM6\nAATulxsNWAjGOO9hLgJ75xHni8f6aBvk68rA1B+HiIfwbIuMzQultm64qHT3T8Pu\nM4137F4q5L23wA==\n-----END EC PRIVATE KEY-----"
-
-PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\nME4wEAYHKoZIzj0CAQYFK4EEACEDOgAE7pcbDVgIxjjvYS4Ce+cR54vH+mgb5OvK\nwNQfh4iH8GyLjM0LpbZuuKh090/D7jONd+xeKuS9t8A=\n-----END PUBLIC KEY-----"
+#PRIVATE_KEY = "-----BEGIN EC PARAMETERS-----\nBgUrgQQAIQ==\n-----END EC PARAMETERS-----\n-----BEGIN EC PRIVATE KEY-----\nMGgCAQEEHGLBg95ayw1hDWUMsfTdqnlQmVpz3n1vTzr7yhmgBwYFK4EEACGhPAM6\nAATulxsNWAjGOO9hLgJ75xHni8f6aBvk68rA1B+HiIfwbIuMzQultm64qHT3T8Pu\nM4137F4q5L23wA==\n-----END EC PRIVATE KEY-----"
+PRIVATE_KEY = "-----BEGIN EC PARAMETERS-----\nBgkrJAMDAggBAQk=\n-----END EC PARAMETERS-----\n-----BEGIN EC PRIVATE KEY-----\nMIGQAgEBBChpZ2yACBR6E29EydMqeo3rlIgFN+TKJjkcR0VbtzX009lVHvddSrVN\noAsGCSskAwMCCAEBCaFUA1IABCPCePCocyiB7mf8+78/wGzhzQUq/l8NXqUm4bfC\nvaN21fbU1OikmqrHIYs9DjWFrG4idHo499GzX3W90E4yXrEJlLHBFOYyIcP7OG3z\nEwsN\n-----END EC PRIVATE KEY-----"
+#PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\nME4wEAYHKoZIzj0CAQYFK4EEACEDOgAE7pcbDVgIxjjvYS4Ce+cR54vH+mgb5OvK\nwNQfh4iH8GyLjM0LpbZuuKh090/D7jONd+xeKuS9t8A=\n-----END PUBLIC KEY-----"
+PUBLIC_KEY = "-----BEGIN PUBLIC KEY-----\nMGowFAYHKoZIzj0CAQYJKyQDAwIIAQEJA1IABCPCePCocyiB7mf8+78/wGzhzQUq\n/l8NXqUm4bfCvaN21fbU1OikmqrHIYs9DjWFrG4idHo499GzX3W90E4yXrEJlLHB\nFOYyIcP7OG3zEwsN\n-----END PUBLIC KEY-----"
 
 # mock transaction
 TRANSACTION = {'header': {'transaction_id': '8a864b59-46e3-4c9b-8dfd-9d9a2bd4b754',
