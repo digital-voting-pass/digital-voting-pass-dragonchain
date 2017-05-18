@@ -37,6 +37,7 @@ import time
 import logging
 logging.basicConfig()
 import hashlib
+import binascii
 
 try:
     import json
@@ -467,19 +468,24 @@ def bytes2long(str):
     :param str: String to convert
     :return: integer representation of passed string
     """
-    return long(str.encode('hex'), 16)
+    return long("0"+str.encode('hex'), 16)
 
 
 def deterministic_hash(items):
     """
     Intermediary hashing function that allows deterministic hashing of a list of items.
+    Check if string, otherwise, string will be threated as list
     :param items: List of items to hash
     :return: Numeric, deterministic hash, returns 0 if item is none
     """
     h = 0
+    if type(items) == str:
+        return bytes2long(items)
     for item in items:
         if not item:
             pass
+        elif is_hex(item):
+            h ^= long(item, 16)
         elif not isinstance(item, (int, long)):
             h ^= bytes2long(item)
         else:
@@ -535,3 +541,12 @@ def merge_hashes(stripped_hash, hash):
     """
     hashed_items = [stripped_hash, hash]
     return deterministic_hash(hashed_items)
+
+def is_hex(s):
+    if type(s) != str:
+        return False
+    hex_digits = set("0123456789abcdef")
+    for char in s:
+        if not (char in hex_digits):
+            return False
+    return True

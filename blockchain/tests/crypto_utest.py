@@ -91,7 +91,7 @@ class TestFinalHash(unittest.TestCase):
         """  testing final_hash() with an arbitrary return value of Hello World to verify it is true
             as well as testing that if you give function empty string, it still hashes properly """
         test_val = crypto.final_hash("Hello World")
-        expected_hash = "e29c9c180c6279b0b02abd6a1801c7c04082cf486ec027aa13515e4f3884bb6b"
+        expected_hash = "c393624efa9b5f3169cd76b699b03e10f7f8b294f6d4f58a56bc770095ab6727"
         self.assertEquals(test_val, expected_hash)
         self.assertFalse(crypto.final_hash("") == "")
 
@@ -100,7 +100,6 @@ class TestBytes2long(unittest.TestCase):
     def test_bytes2long(self):
         """ testing crypto bytes2long """
         self.assertRaises(AttributeError, crypto.bytes2long, 123)
-        self.assertRaises(ValueError, crypto.bytes2long, "")
 
         test_val = crypto.bytes2long("111233345556@")
         expected_val = 3897404203108157008445053417024
@@ -117,8 +116,8 @@ class TestDeterministicHash(TestCase):
 
         # calculate hash for hashed_items
         val = crypto.deterministic_hash(hashed_items)
-        expected_hash = 233888947446904696754100748358486582297006536790227845537678672765978391714164843162143
-
+        expected_hash = 233888947446904696754100748358486582297006536790227845537695088556215989769121608852431
+        
         # insure the returned hash value of hashed_items matches what it should be
         self.assertEqual(val, expected_hash)
 
