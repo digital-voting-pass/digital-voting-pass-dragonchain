@@ -108,15 +108,24 @@ def sign_transaction(signatory,
 
     # merge stripped_hash and hash to send for signing
     log.info("Merging stripped and full hash")
-    merged_hash = merge_hashes(stripped_hash, hash)
+    merged_hash = "{:x}".format(merge_hashes(stripped_hash, hash))
+    merged_hash_parts = []
 
-    # sign merged hash
+    # Split merged hash into parts with length 8
+    for i in xrange(0, len(merged_hash)/16):
+            merged_hash_parts.append(merged_hash[i*16:i*16+16])
+
+    # sign merged hash parts
     log.info("Signing merged hash")
-    signature = ecdsa_signing_key.sign(str(merged_hash))
-    log.info("Base64 encoding the signature")
-    digest = signature.encode('base64')
+    signature_parts = []
+    for part in merged_hash_parts:
+            signature = ecdsa_signing_key.sign(binascii.unhexlify(part))
+            signature.encode('base64')
+            signature_parts.append(signature)
 
-    assemble_sig_block(transaction, signatory, public_key_string, digest, hash, signature_ts, stripped_hash,
+    log.info("Base64 encoding the signature")
+
+    assemble_sig_block(transaction, signatory, public_key_string, signature_parts, hash, signature_ts, stripped_hash,
                        child_signature)
 
     return transaction
