@@ -91,7 +91,7 @@ class TestFinalHash(unittest.TestCase):
         """  testing final_hash() with an arbitrary return value of Hello World to verify it is true
             as well as testing that if you give function empty string, it still hashes properly """
         test_val = crypto.final_hash("Hello World")
-        expected_hash = "e63006bd9f35f06cd20582fc8b34ae76a15080297be886decd6dfd42f59e5174a537e8cd92ef577297f967beb6b758c1835f4c270c251e10c12331fcd8635c53"
+        expected_hash = "e29c9c180c6279b0b02abd6a1801c7c04082cf486ec027aa13515e4f3884bb6b"
         self.assertEquals(test_val, expected_hash)
         self.assertFalse(crypto.final_hash("") == "")
 

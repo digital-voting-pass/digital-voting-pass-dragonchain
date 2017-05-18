@@ -509,7 +509,7 @@ def deep_hash(thing):
     return deterministic_hash(list_to_hash)
 
 
-def final_hash(items, type=512):
+def final_hash(items, type=256):
     """
     Deterministic hashing function that should be used for any full hashing in the system.
     :param items: A list of items to hash deterministically.
